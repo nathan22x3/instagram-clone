@@ -1,0 +1,22 @@
+{
+  "login": "Đăng nhập",
+  "signup": "Đăng ký",
+  "loginWith": "Đăng nhập với {{socialNetwork}}",
+  "signupWith": "Đăng ký với {{socialNetwork}}",
+  "loginSuggestion": "Đã có tài khoản?",
+  "signupSuggestion": "Chưa có tài khoản?",
+  "phoneEmailUsername": "Số điện thoại, email hoặc username",
+  "password": "Mật khẩu",
+  "or": "hoặc",
+  "newPost": "Bài viết mới",
+  "writeCaption": "Viết gì đi...",
+  "posts": "Bài viết",
+  "addComment": "Thêm bình luận...",
+  "followers": "Người theo dõi",
+  "following": "Đang theo dõi",
+  "editProfile": "Thay đổi thông tin",
+  "error": {
+    "login": {},
+    "signup": {}
+  }
+}

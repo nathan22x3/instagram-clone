@@ -1,0 +1,3 @@
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const SET_AUTH_ERRORS = 'SET_SIGNUP_ERRORS';
+export const GET_USER_POSTS = 'GET_USER_POSTS';

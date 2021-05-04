@@ -1,0 +1,22 @@
+{
+  "login": "Log in",
+  "signup": "Sign up",
+  "loginWith": "Login with {{socialNetwork}}",
+  "signupWith": "Signup with {{socialNetwork}}",
+  "loginSuggestion": "Already have an account?",
+  "signupSuggestion": "Don't have an account?",
+  "phoneEmailUsername": "Phone number, email or username",
+  "password": "Password",
+  "or": "or",
+  "newPost": "New Post",
+  "writeCaption": "Write a caption...",
+  "posts": "Posts",
+  "addComment": "Add a comment...",
+  "followers": "Followers",
+  "following": "Following",
+  "editProfile": "Edit Profile",
+  "error": {
+    "login": {},
+    "signup": {}
+  }
+}
