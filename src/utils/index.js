@@ -39,6 +39,10 @@ export const shade = (color, amt) => {
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
 };
 
+export const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 export const getErrorMessage = (error) => {
   const prefix = /\[auth\/([\w|-]*)+\]/;
   return error.replace(prefix, '').trim();

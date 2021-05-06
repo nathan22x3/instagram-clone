@@ -1,35 +1,43 @@
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import firebase from 'firebase';
 import { getErrorMessage } from '../../utils';
 import { SET_AUTH_ERRORS } from '../constants';
 
 export const login = (email, password) => (dispatch) => {
-  auth()
+  firebase
+    .auth()
     .signInWithEmailAndPassword(email, password)
     .catch((error) => {
       dispatch({
         type: SET_AUTH_ERRORS,
         errors: { login: getErrorMessage(error.message) },
       });
+      console.log(getErrorMessage(error.message));
     });
 };
 
 export const signup = (email, password) => (dispatch) => {
-  auth()
+  firebase
+    .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(({ user }) => {
-      firestore().collection('users').doc(user.uid).set({ email: user.email });
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(user.uid)
+        .set({ email: user.email });
     })
     .catch((error) => {
       dispatch({
         type: SET_AUTH_ERRORS,
         errors: { signup: getErrorMessage(error.message) },
       });
+      console.log(getErrorMessage(error.message));
     });
 };
 
 export const logout = () => (dispatch) => {
-  auth()
+  firebase
+    .auth()
     .signOut()
     .catch((error) => {
       dispatch({

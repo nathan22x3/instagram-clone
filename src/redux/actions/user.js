@@ -1,15 +1,15 @@
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import firebase from 'firebase';
 import { GET_USER_POSTS, SET_CURRENT_USER } from '../constants';
 
-export const setCurrentUser = (user) => async (dispatch) => {
+export const setCurrentUser = (user) => (dispatch) => {
   dispatch({ type: SET_CURRENT_USER, currentUser: user });
 };
 
-export const fetchUserPosts = () => (dispatch) => {
-  firestore()
+export const fetchUserPosts = () => async (dispatch) => {
+  firebase
+    .firestore()
     .collection('posts')
-    .doc(auth().currentUser.uid)
+    .doc(firebase.auth().currentUser.uid)
     .collection('userPosts')
     .orderBy('createAt', 'asc')
     .get()

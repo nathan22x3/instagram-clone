@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { ThemeContext } from '../contexts/ThemeContext';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-// import NewPostStack from './NewPostStack';
+import NewPostStack from './NewPostStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,11 +46,11 @@ const AppTab = () => {
       sceneContainerStyle={{ backgroundColor: theme.background }}
     >
       <Tab.Screen name='Home' component={HomeScreen} />
-      {/* <Tab.Screen
-        name="NewPost"
+      <Tab.Screen
+        name='NewPost'
         component={NewPostStack}
         options={{ tabBarVisible: false }}
-      /> */}
+      />
       <Tab.Screen name='Profile' component={ProfileScreen} />
     </Tab.Navigator>
   );

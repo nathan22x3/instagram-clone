@@ -2,7 +2,7 @@ import React from 'react';
 import HomeHeader from '../components/home/HomeHeader';
 import { FlatList } from 'react-native';
 import Story from '../components/story/Story';
-import FeedItem from '../components/feed/FeedItem';
+import PostItem from '../components/post/PostItem';
 
 const data = [
   {
@@ -24,7 +24,7 @@ const HomeScreen = () => {
       <FlatList
         ListHeaderComponent={Story}
         data={data}
-        renderItem={({ item }) => <FeedItem {...item} />}
+        renderItem={({ item }) => <PostItem {...item} />}
         keyExtractor={(item) => `${item.id}`}
       />
     </>
