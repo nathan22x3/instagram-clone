@@ -18,9 +18,10 @@ const { width } = Dimensions.get('window');
 const SignupForm = ({ signup }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
+
   const [userInfo, setUserInfo] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
-    { email: '', password: '' }
+    { username: '', email: '', password: '' }
   );
 
   const handleInputChange = (key, value) => {
@@ -31,6 +32,10 @@ const SignupForm = ({ signup }) => {
     <KeyboardAvoidingView style={styles.container}>
       <Text style={[styles.logo, { color: theme.label }]}>Instagram Clone</Text>
       <TextInput
+        placeholder={t('username')}
+        onChangeText={(value) => handleInputChange('username', value)}
+      />
+      <TextInput
         placeholder={t('phoneEmailUsername')}
         onChangeText={(value) => handleInputChange('email', value)}
       />
@@ -40,8 +45,9 @@ const SignupForm = ({ signup }) => {
         onChangeText={(value) => handleInputChange('password', value)}
       />
       <Button
+        style={styles.button}
         color={theme.label}
-        onPress={() => signup(userInfo.email, userInfo.password)}
+        onPress={() => signup(userInfo.user, userInfo.email, userInfo.password)}
       >
         {t('signup')}
       </Button>
@@ -67,4 +73,5 @@ const styles = StyleSheet.create({
     fontFamily: 'GochiHand_400Regular',
     fontSize: 40,
   },
+  button: { width: '100%' },
 });

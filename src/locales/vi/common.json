@@ -5,6 +5,7 @@
   "signupWith": "Đăng ký với {{socialNetwork}}",
   "loginSuggestion": "Đã có tài khoản?",
   "signupSuggestion": "Chưa có tài khoản?",
+  "username": "Tên người dùng",
   "phoneEmailUsername": "Số điện thoại, email hoặc username",
   "password": "Mật khẩu",
   "or": "hoặc",
@@ -14,9 +15,13 @@
   "writeCaption": "Viết gì đi...",
   "posts": "Bài viết",
   "addComment": "Thêm bình luận...",
+  "follow": "Theo dõi",
   "followers": "Người theo dõi",
   "following": "Đang theo dõi",
+  "message": "Nhắn tin",
+  "contact": "Liên hệ",
   "editProfile": "Thay đổi thông tin",
+  "search": "Tìm kiếm",
   "error": {
     "login": {},
     "signup": {}

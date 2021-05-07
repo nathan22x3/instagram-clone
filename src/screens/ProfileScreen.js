@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -11,63 +11,60 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileUserInfo from '../components/profile/ProfileUserInfo';
-import { fetchUserPosts } from '../redux/actions/user';
+import { ThemeContext } from '../contexts/ThemeContext';
+import { getUserPosts } from '../redux/actions/user';
 import { wait } from '../utils';
+import FastImage from 'react-native-fast-image';
 
 const { width } = Dimensions.get('window');
 const NUM_COLUMNS = 3;
+const HEIGHT = width / NUM_COLUMNS;
 
-const ProfileScreen = ({ posts, fetchUserPosts }) => {
+const ProfileScreen = ({ posts, getUserPosts }) => {
+  const theme = useContext(ThemeContext);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    getUserPosts();
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }) => (
+      <View style={styles.item}>
+        <Image style={styles.itemImage} source={{ uri: item.downloadURL }} />
+      </View>
+    ),
+    []
+  );
+
+  const keyExtraction = useCallback((item) => item.id, []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      fetchUserPosts();
+      getUserPosts();
       setRefreshing(false);
     });
   }, []);
 
-  const formatData = (data, numColumns = NUM_COLUMNS) => {
-    const numberOfFullRow = Math.floor(data.length / numColumns);
-    let numberOfElementLastRow = data.length - numberOfFullRow * numColumns;
-    while (
-      numberOfElementLastRow !== numColumns &&
-      numberOfElementLastRow !== 0
-    ) {
-      data.push({ id: Math.random().toString(36), hidden: true });
-      numberOfElementLastRow++;
-    }
-
-    return data;
-  };
-
   return (
     <>
-      <ProfileHeader />
+      <ProfileHeader posts={posts.length} />
       <FlatList
         style={styles.grid}
-        ListHeaderComponent={ProfileUserInfo}
-        data={formatData(posts)}
-        keyExtraction={(item) => item.id}
-        refreshControl={
-          <RefreshControl {...{ refreshing }} {...{ onRefresh }} />
-        }
-        renderItem={({ item }) => {
-          if (item.hidden) {
-            return <View style={[styles.item, styles.itemInvisible]} />;
-          }
-
-          return (
-            <View style={styles.item}>
-              <Image
-                style={styles.itemImage}
-                source={{ uri: item.downloadURL }}
-              />
-            </View>
-          );
-        }}
+        data={posts}
+        {...{ keyExtraction }}
+        {...{ renderItem }}
         numColumns={3}
+        ListHeaderComponent={ProfileUserInfo}
+        refreshControl={
+          <RefreshControl
+            {...{ refreshing }}
+            {...{ onRefresh }}
+            colors={[theme.blue]}
+            progressBackgroundColor={theme.grey}
+          />
+        }
       />
     </>
   );
@@ -78,7 +75,7 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchUserPosts }, dispatch);
+  bindActionCreators({ getUserPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 
@@ -88,9 +85,8 @@ const styles = StyleSheet.create({
     height: 'auto',
   },
   item: {
-    height: width / NUM_COLUMNS,
-    flex: 1,
-    aspectRatio: 1,
+    flex: 1 / 3,
+    height: HEIGHT,
     margin: 1.5,
   },
   itemImage: {

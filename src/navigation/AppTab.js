@@ -1,16 +1,25 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { ThemeContext } from '../contexts/ThemeContext';
+import { getUserInfo, getUserPosts } from '../redux/actions/user';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import NewPostStack from './NewPostStack';
+import SearchStack from './SearchStack';
 
 const Tab = createBottomTabNavigator();
 
-const AppTab = () => {
+const AppTab = ({ getUserInfo, getUserPosts }) => {
   const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    getUserInfo();
+    getUserPosts();
+  }, []);
 
   return (
     <Tab.Navigator
@@ -18,6 +27,8 @@ const AppTab = () => {
         tabBarIcon: ({ color }) => {
           if (route.name === 'Home') {
             return <Feather name={'home'} size={24} {...{ color }} />;
+          } else if (route.name === 'Search') {
+            return <Feather name={'search'} size={26} {...{ color }} />;
           } else if (route.name === 'NewPost') {
             return <Feather name={'plus-square'} size={26} {...{ color }} />;
           } else if (route.name === 'Profile') {
@@ -37,15 +48,16 @@ const AppTab = () => {
         activeTintColor: theme.label,
         inactiveTintColor: theme.secondaryLabel,
         style: {
+          height: 60,
           backgroundColor: theme.background,
-          paddingTop: 10,
           borderTopWidth: 0.5,
           borderTopColor: 'transparent',
         },
       }}
-      sceneContainerStyle={{ backgroundColor: theme.background }}
+      initialRouteName={'Home'}
     >
       <Tab.Screen name='Home' component={HomeScreen} />
+      <Tab.Screen name='Search' component={SearchStack} />
       <Tab.Screen
         name='NewPost'
         component={NewPostStack}
@@ -56,7 +68,10 @@ const AppTab = () => {
   );
 };
 
-export default AppTab;
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ getUserInfo, getUserPosts }, dispatch);
+
+export default connect(null, mapDispatchToProps)(AppTab);
 
 const styles = StyleSheet.create({
   avatar: {

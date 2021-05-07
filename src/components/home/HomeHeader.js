@@ -13,7 +13,7 @@ const HomeHeader = () => {
         <TouchableOpacity activeOpacity={0.7}>
           <FontAwesome5
             name={'facebook-messenger'}
-            size={24}
+            size={26}
             color={theme.label}
             style={{ marginLeft: 24 }}
           />
@@ -31,8 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
 
-    height: 60,
-    paddingVertical: 16,
+    height: 70,
     paddingHorizontal: 20,
   },
   logo: {

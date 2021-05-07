@@ -15,7 +15,7 @@ export const login = (email, password) => (dispatch) => {
     });
 };
 
-export const signup = (email, password) => (dispatch) => {
+export const signup = (username, email, password) => (dispatch) => {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
@@ -24,7 +24,7 @@ export const signup = (email, password) => (dispatch) => {
         .firestore()
         .collection('users')
         .doc(user.uid)
-        .set({ email: user.email });
+        .set({ email, username });
     })
     .catch((error) => {
       dispatch({

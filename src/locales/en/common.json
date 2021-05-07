@@ -5,6 +5,7 @@
   "signupWith": "Signup with {{socialNetwork}}",
   "loginSuggestion": "Already have an account?",
   "signupSuggestion": "Don't have an account?",
+  "username": "Username",
   "phoneEmailUsername": "Phone number, email or username",
   "password": "Password",
   "or": "or",
@@ -14,9 +15,13 @@
   "writeCaption": "Write a caption...",
   "posts": "Posts",
   "addComment": "Add a comment...",
+  "follow": "Theo dõi",
   "followers": "Followers",
   "following": "Following",
+  "message": "Message",
+  "contact": "Contact",
   "editProfile": "Edit Profile",
+  "search": "Search",
   "error": {
     "login": {},
     "signup": {}

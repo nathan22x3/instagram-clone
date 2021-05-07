@@ -1,13 +1,10 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { ThemeContext } from '../../contexts/ThemeContext';
-import { logout } from '../../redux/actions/auth';
 import Button from '../custom/Button';
 
-const ProfileBody = ({ postsCount, logout }) => {
+const SearchProfileUserInfo = () => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
 
@@ -22,9 +19,7 @@ const ProfileBody = ({ postsCount, logout }) => {
         />
         <View style={styles.postsAndFollows}>
           <View style={styles.postsAndFollowsItem}>
-            <Text style={[styles.counter, { color: theme.label }]}>
-              {postsCount || 0}
-            </Text>
+            <Text style={[styles.counter, { color: theme.label }]}>0</Text>
             <Text style={{ color: theme.label }}>{t('posts')}</Text>
           </View>
           <View style={styles.postsAndFollowsItem}>
@@ -41,30 +36,26 @@ const ProfileBody = ({ postsCount, logout }) => {
         <Text style={[styles.name, { color: theme.label }]}>Nam Nguyễn</Text>
         <Text style={[styles.bio, { color: theme.label }]}>Grrr...</Text>
       </View>
-      <Button
-        style={[
-          styles.editProfileButton,
-          { borderColor: theme.secondaryLabel },
-        ]}
-        backgroundColor={'transparent'}
-      >
-        {t('editProfile')}
-      </Button>
-      <TouchableOpacity onPress={logout}>
-        <Text style={{ color: theme.label }}>Logout</Text>
-      </TouchableOpacity>
+      <View style={styles.actions}>
+        <Button style={[styles.button]} backgroundColor={theme.blue}>
+          {t('follow')}
+        </Button>
+        <Button
+          style={[
+            styles.button,
+            styles.lastButton,
+            { borderColor: theme.secondaryLabel },
+          ]}
+          backgroundColor={'transparent'}
+        >
+          {t('message')}
+        </Button>
+      </View>
     </View>
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  postsCount: user.postsCount,
-});
-
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ logout }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileBody);
+export default SearchProfileUserInfo;
 
 const styles = StyleSheet.create({
   container: {
@@ -102,10 +93,19 @@ const styles = StyleSheet.create({
   bio: {
     fontSize: 16,
   },
-  editProfileButton: {
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  button: {
+    flex: 1,
     height: 'auto',
     borderWidth: 1,
     padding: 10,
     marginTop: 20,
+    marginRight: 5,
+  },
+  lastButton: {
+    marginRight: 0,
   },
 });

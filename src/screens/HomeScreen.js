@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import HomeHeader from '../components/home/HomeHeader';
 import { FlatList } from 'react-native';
 import Story from '../components/story/Story';
@@ -18,14 +18,17 @@ const data = [
 ];
 
 const HomeScreen = () => {
+  const renderItem = useCallback(({ item }) => <PostItem {...item} />, []);
+  const keyExtractor = useCallback((item) => `${item.id}`, []);
+
   return (
     <>
       <HomeHeader />
       <FlatList
         ListHeaderComponent={Story}
         data={data}
-        renderItem={({ item }) => <PostItem {...item} />}
-        keyExtractor={(item) => `${item.id}`}
+        {...{ renderItem }}
+        {...{ keyExtractor }}
       />
     </>
   );

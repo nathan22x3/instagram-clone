@@ -18,33 +18,29 @@ const Button = ({
 
   return (
     <TouchableOpacity
-      style={{ width: '100%' }}
+      style={[
+        styles.container,
+        {
+          backgroundColor: shade(finalBackgroundColor, alpha),
+        },
+        style,
+      ]}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.9}
     >
-      <View
+      {icon}
+      <Text
         style={[
-          styles.container,
+          styles.content,
           {
-            backgroundColor: shade(finalBackgroundColor, alpha),
+            color: shade(color || theme.label, alpha),
+            marginLeft: icon ? 10 : 0,
           },
-          style,
         ]}
       >
-        {icon}
-        <Text
-          style={[
-            styles.content,
-            {
-              color: shade(color || theme.label, alpha),
-              marginLeft: icon ? 10 : 0,
-            },
-          ]}
-        >
-          {children}
-        </Text>
-      </View>
+        {children}
+      </Text>
     </TouchableOpacity>
   );
 };

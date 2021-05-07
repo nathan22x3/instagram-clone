@@ -1,17 +1,32 @@
 import firebase from 'firebase';
-import { GET_USER_POSTS, SET_CURRENT_USER } from '../constants';
+import {
+  GET_USER_POSTS,
+  SET_CURRENT_USER,
+  SET_USER_CREDENTIALS,
+} from '../constants';
 
-export const setCurrentUser = (user) => (dispatch) => {
-  dispatch({ type: SET_CURRENT_USER, currentUser: user });
+export const setUserCredentials = (user) => (dispatch) => {
+  dispatch({ type: SET_USER_CREDENTIALS, userCredentials: user });
 };
 
-export const fetchUserPosts = () => async (dispatch) => {
+export const getUserInfo = () => (dispatch) => {
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(firebase.auth().currentUser.uid)
+    .get()
+    .then((snapshopt) => {
+      dispatch({ type: SET_CURRENT_USER, currentUser: snapshopt.data() });
+    });
+};
+
+export const getUserPosts = () => (dispatch) => {
   firebase
     .firestore()
     .collection('posts')
     .doc(firebase.auth().currentUser.uid)
     .collection('userPosts')
-    .orderBy('createAt', 'asc')
+    .orderBy('createAt', 'desc')
     .get()
     .then((snapshot) => {
       const posts = snapshot.docs.map((post) => {

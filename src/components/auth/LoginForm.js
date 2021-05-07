@@ -20,6 +20,7 @@ const { width } = Dimensions.get('window');
 const LoginForm = ({ login }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
+
   const [userInfo, setUserInfo] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     { email: '', password: '' }
@@ -42,6 +43,7 @@ const LoginForm = ({ login }) => {
         onChangeText={(value) => handleInputChange('password', value)}
       />
       <Button
+        style={styles.button}
         color={theme.label}
         onPress={() => login(userInfo.email, userInfo.password)}
       >
@@ -61,6 +63,7 @@ const LoginForm = ({ login }) => {
         </Text>
       </View>
       <Button
+        style={styles.button}
         icon={
           <FontAwesome5Brands name={'facebook'} size={24} color={theme.label} />
         }
@@ -89,6 +92,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     fontFamily: 'GochiHand_400Regular',
     fontSize: 40,
+  },
+  button: {
+    width: '100%',
   },
   separator: {
     position: 'relative',

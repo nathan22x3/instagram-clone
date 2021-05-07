@@ -1,34 +1,39 @@
+import { useNavigation } from '@react-navigation/native';
 import AppLoading from 'expo-app-loading';
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import { connect } from 'react-redux';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import { ellipsisText } from '../../utils';
 
-const ProfileHeader = ({ currentUser }) => {
+const SearchProfileHeader = ({ userInfo }) => {
   const theme = useContext(ThemeContext);
+  const navigation = useNavigation();
 
-  if (!currentUser) return <AppLoading />;
+  if (!userInfo) return <AppLoading />;
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.7}>
-        <View style={styles.switchAccount}>
-          <Text style={[styles.username, { color: theme.label }]}>
-            {ellipsisText(currentUser.username, 16)}
-          </Text>
-          <Feather name={'chevron-down'} size={22} color={theme.label} />
-        </View>
-      </TouchableOpacity>
-      <View style={styles.actions}>
+      <View style={styles.left}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name={'arrowleft'} color={theme.label} size={27} />
+        </TouchableOpacity>
+        <Text style={[styles.username, { color: theme.label }]}>
+          {ellipsisText(userInfo.username, 16)}
+        </Text>
+      </View>
+      <View style={styles.right}>
         <TouchableOpacity activeOpacity={0.7}>
-          <Feather name={'plus'} size={28} color={theme.label} />
+          <Feather name={'bell'} size={28} color={theme.label} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7}>
           <Feather
-            name={'menu'}
+            name={'more-vertical'}
             size={26}
             color={theme.label}
             style={{ marginLeft: 24 }}
@@ -39,11 +44,7 @@ const ProfileHeader = ({ currentUser }) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
-
-export default connect(mapStateToProps, null)(ProfileHeader);
+export default SearchProfileHeader;
 
 const styles = StyleSheet.create({
   container: {
@@ -53,16 +54,16 @@ const styles = StyleSheet.create({
     height: 70,
     paddingHorizontal: 20,
   },
-  switchAccount: {
+  left: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   username: {
-    marginRight: 8,
+    marginLeft: 20,
     fontFamily: 'Roboto_500Medium',
     fontSize: 22,
   },
-  actions: {
+  right: {
     flexDirection: 'row',
     alignItems: 'center',
   },

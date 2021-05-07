@@ -1,5 +1,5 @@
 export const ellipsisText = (text, limit) => {
-  return text.length > limit ? text.substring(0, limit - 3) + '...' : text;
+  return text?.length > limit ? text.substring(0, limit - 3) + '...' : text;
 };
 
 export const shade = (color, amt) => {
