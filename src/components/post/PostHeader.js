@@ -1,10 +1,10 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-const FeedItemHeader = ({ userInfo }) => {
+const PostHeader = ({ userInfo }) => {
   const theme = useContext(ThemeContext);
   const { avatarUri, username } = userInfo;
 
@@ -33,7 +33,7 @@ const FeedItemHeader = ({ userInfo }) => {
   );
 };
 
-export default FeedItemHeader;
+export default PostHeader;
 
 const styles = StyleSheet.create({
   container: {

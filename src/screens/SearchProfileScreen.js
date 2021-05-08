@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Dimensions, View } from 'react-native';
 import SearchProfileHeader from '../components/search/SearchProfileHeader';
 import SearchProfileUserInfo from '../components/search/SearchProfileUserInfo';
@@ -30,6 +30,11 @@ const SearchProfileScreen = ({ route }) => {
       });
   };
 
+  const ListHeaderComponent = useCallback(
+    () => <SearchProfileUserInfo {...{ userInfo }} />,
+    []
+  );
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -50,7 +55,7 @@ const SearchProfileScreen = ({ route }) => {
           </View>
         )}
         numColumns={3}
-        ListHeaderComponent={() => <SearchProfileUserInfo />}
+        {...{ ListHeaderComponent }}
       />
     </>
   );

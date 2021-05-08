@@ -29,7 +29,7 @@ const AppTab = ({ getUserInfo, getUserPosts }) => {
             return <Feather name={'home'} size={24} {...{ color }} />;
           } else if (route.name === 'Search') {
             return <Feather name={'search'} size={26} {...{ color }} />;
-          } else if (route.name === 'NewPost') {
+          } else if (route.name === 'New') {
             return <Feather name={'plus-square'} size={26} {...{ color }} />;
           } else if (route.name === 'Profile') {
             return (
@@ -59,7 +59,7 @@ const AppTab = ({ getUserInfo, getUserPosts }) => {
       <Tab.Screen name='Home' component={HomeScreen} />
       <Tab.Screen name='Search' component={SearchStack} />
       <Tab.Screen
-        name='NewPost'
+        name='New'
         component={NewPostStack}
         options={{ tabBarVisible: false }}
       />

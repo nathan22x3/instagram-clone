@@ -21,7 +21,10 @@ const Button = ({
       style={[
         styles.container,
         {
-          backgroundColor: shade(finalBackgroundColor, alpha),
+          backgroundColor:
+            finalBackgroundColor === 'transparent'
+              ? finalBackgroundColor
+              : shade(finalBackgroundColor, alpha),
         },
         style,
       ]}

@@ -2,6 +2,7 @@ import {
   GET_USER_POSTS,
   SET_CURRENT_USER,
   SET_USER_CREDENTIALS,
+  SET_USER_FOLLOWINGS,
 } from '../constants';
 
 const initialState = {
@@ -9,6 +10,8 @@ const initialState = {
   currentUser: null,
   posts: [],
   postsCount: 0,
+  followings: [],
+  followingsCount: 0,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -30,6 +33,27 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         posts: action.posts,
         postsCount: action.posts.length,
+      };
+
+    case SET_USER_FOLLOWINGS:
+      const newState = {
+        followings: [],
+        followingsCount: 0,
+      };
+
+      if (!action.isFollowing) {
+        newState.followings = [...state.followings, action.userId];
+        newState.followingsCount = state.followingsCount + 1;
+      } else {
+        newState.followings = [...state.followings].filter(
+          (userId) => userId !== action.userId
+        );
+        newState.followingsCount = state.followingsCount - 1;
+      }
+
+      return {
+        ...state,
+        ...newState,
       };
 
     default:

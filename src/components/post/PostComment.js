@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-const FeedItemComment = ({ avatarUri, username, content }) => {
+const PostComment = ({ avatarUri, username, content }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
 
@@ -43,7 +43,7 @@ const FeedItemComment = ({ avatarUri, username, content }) => {
   );
 };
 
-export default FeedItemComment;
+export default PostComment;
 
 const styles = StyleSheet.create({
   comment: {

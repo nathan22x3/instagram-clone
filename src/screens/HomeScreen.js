@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import HomeHeader from '../components/home/HomeHeader';
 import { FlatList } from 'react-native';
 import Story from '../components/story/Story';
-import PostItem from '../components/post/PostItem';
+import Post from '../components/post/Post';
 
 const data = [
   {
@@ -18,7 +18,7 @@ const data = [
 ];
 
 const HomeScreen = () => {
-  const renderItem = useCallback(({ item }) => <PostItem {...item} />, []);
+  const renderItem = useCallback(({ item }) => <Post {...item} />, []);
   const keyExtractor = useCallback((item) => `${item.id}`, []);
 
   return (

@@ -3,6 +3,7 @@ import {
   GET_USER_POSTS,
   SET_CURRENT_USER,
   SET_USER_CREDENTIALS,
+  SET_USER_FOLLOWINGS,
 } from '../constants';
 
 export const setUserCredentials = (user) => (dispatch) => {
@@ -37,4 +38,30 @@ export const getUserPosts = () => (dispatch) => {
 
       dispatch({ type: GET_USER_POSTS, posts });
     });
+};
+
+export const followingUser = (userId) => (dispatch) => {
+  firebase
+    .firestore()
+    .collection('followings')
+    .doc(firebase.auth().currentUser.uid)
+    .collection('userFollowings')
+    .doc(userId)
+    .set({})
+    .then(() =>
+      dispatch({ type: SET_USER_FOLLOWINGS, userId, isFollowing: false })
+    );
+};
+
+export const unfollowingUser = (userId) => (dispatch) => {
+  firebase
+    .firestore()
+    .collection('followings')
+    .doc(firebase.auth().currentUser.uid)
+    .collection('userFollowings')
+    .doc(userId)
+    .delete()
+    .then(() =>
+      dispatch({ type: SET_USER_FOLLOWINGS, userId, isFollowing: true })
+    );
 };

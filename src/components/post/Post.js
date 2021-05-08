@@ -1,12 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { ThemeContext } from '../../contexts/ThemeContext';
-import PostItemComment from './PostItemComment';
-import PostItemHeader from './PostItemHeader';
-import PostItemLeftAction from './PostItemLeftAction';
-import PostItemPagination from './PostItemPagination';
-import PostItemRightAction from './PostItemRightAction';
+import PostAction from './PostAction';
+import PostComment from './PostComment';
+import PostHeader from './PostHeader';
 
 const { width } = Dimensions.get('window');
 
@@ -16,13 +14,13 @@ const slides = [
   { id: 2, uri: 'https://picsum.photos/1000' },
 ];
 
-const FeedItem = ({ avatarUri, username }) => {
+const Post = ({ avatarUri, username }) => {
   const theme = useContext(ThemeContext);
   const [activeSlide, setActiveSlide] = useState(0);
 
   return (
     <View style={styles.container}>
-      <PostItemHeader userInfo={{ avatarUri, username }} />
+      <PostHeader userInfo={{ avatarUri, username }} />
       <Carousel
         data={slides}
         renderItem={({ item }) => (
@@ -35,14 +33,7 @@ const FeedItem = ({ avatarUri, username }) => {
       <View
         style={[styles.actions, { marginTop: slides.length === 1 ? 16 : 0 }]}
       >
-        <PostItemLeftAction color={theme.label} />
-        <PostItemPagination
-          dotsLength={slides.length}
-          activeDotIndex={activeSlide}
-          activeDotColor={theme.blue}
-          inactiveDotColor={theme.secondaryLabel}
-        />
-        <PostItemRightAction color={theme.label} />
+        <PostAction dotsLength={slides.length} activeDotIndex={activeSlide} />
       </View>
       <View style={styles.feedInfo}>
         <Text style={[styles.boldLabel, { color: theme.label }]}>37 likes</Text>
@@ -54,7 +45,7 @@ const FeedItem = ({ avatarUri, username }) => {
             <Text style={{ color: theme.link, fontSize: 15 }}>#natural</Text>
           </View>
         </View>
-        <PostItemComment
+        <PostComment
           avatarUri={avatarUri}
           username={'pe_chang'}
           content={'xink dạ ♥'}
@@ -64,7 +55,7 @@ const FeedItem = ({ avatarUri, username }) => {
   );
 };
 
-export default FeedItem;
+export default Post;
 
 const styles = StyleSheet.create({
   container: {

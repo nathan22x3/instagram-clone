@@ -1,12 +1,36 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import { followingUser, unfollowingUser } from '../../redux/actions/user';
 import Button from '../custom/Button';
 
-const SearchProfileUserInfo = () => {
+const SearchProfileUserInfo = ({
+  userInfo,
+  followings,
+  followingUser,
+  unfollowingUser,
+}) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    if (followings.find((userId) => userId === userInfo.id))
+      setIsFollowing(true);
+  }, []);
+
+  const handleFollowing = () => {
+    followingUser(userInfo.id);
+    setIsFollowing(true);
+  };
+
+  const handleUnfollowing = () => {
+    unfollowingUser(userInfo.id);
+    setIsFollowing(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -37,9 +61,23 @@ const SearchProfileUserInfo = () => {
         <Text style={[styles.bio, { color: theme.label }]}>Grrr...</Text>
       </View>
       <View style={styles.actions}>
-        <Button style={[styles.button]} backgroundColor={theme.blue}>
-          {t('follow')}
-        </Button>
+        {isFollowing ? (
+          <Button
+            style={[styles.button, { borderColor: theme.secondaryLabel }]}
+            backgroundColor={'transparent'}
+            onPress={handleUnfollowing}
+          >
+            {t('following')}
+          </Button>
+        ) : (
+          <Button
+            style={[styles.button]}
+            backgroundColor={theme.blue}
+            onPress={handleFollowing}
+          >
+            {t('follow')}
+          </Button>
+        )}
         <Button
           style={[
             styles.button,
@@ -55,7 +93,17 @@ const SearchProfileUserInfo = () => {
   );
 };
 
-export default SearchProfileUserInfo;
+const mapStateToProps = ({ user }) => ({
+  followings: user.followings,
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ followingUser, unfollowingUser }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchProfileUserInfo);
 
 const styles = StyleSheet.create({
   container: {

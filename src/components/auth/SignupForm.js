@@ -47,7 +47,9 @@ const SignupForm = ({ signup }) => {
       <Button
         style={styles.button}
         color={theme.label}
-        onPress={() => signup(userInfo.user, userInfo.email, userInfo.password)}
+        onPress={() =>
+          signup(userInfo.username, userInfo.email, userInfo.password)
+        }
       >
         {t('signup')}
       </Button>

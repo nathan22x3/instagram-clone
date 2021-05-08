@@ -7,7 +7,7 @@ import { ThemeContext } from '../../contexts/ThemeContext';
 import { logout } from '../../redux/actions/auth';
 import Button from '../custom/Button';
 
-const ProfileBody = ({ postsCount, logout }) => {
+const ProfileBody = ({ postsCount, followingsCount, logout }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
 
@@ -32,7 +32,9 @@ const ProfileBody = ({ postsCount, logout }) => {
             <Text style={{ color: theme.label }}>{t('followers')}</Text>
           </View>
           <View style={styles.postsAndFollowsItem}>
-            <Text style={[styles.counter, { color: theme.label }]}>0</Text>
+            <Text style={[styles.counter, { color: theme.label }]}>
+              {followingsCount || 0}
+            </Text>
             <Text style={{ color: theme.label }}>{t('following')}</Text>
           </View>
         </View>
@@ -59,6 +61,7 @@ const ProfileBody = ({ postsCount, logout }) => {
 
 const mapStateToProps = ({ user }) => ({
   postsCount: user.postsCount,
+  followingsCount: user.followingsCount,
 });
 
 const mapDispatchToProps = (dispatch) =>
