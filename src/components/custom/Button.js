@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import { shade } from '../../utils';
 
@@ -8,6 +14,7 @@ const Button = ({
   color,
   icon,
   children,
+  loading,
   disabled,
   onPress,
   style,
@@ -33,17 +40,30 @@ const Button = ({
       activeOpacity={0.9}
     >
       {icon}
-      <Text
+      <View
         style={[
           styles.content,
           {
-            color: shade(color || theme.label, alpha),
             marginLeft: icon ? 10 : 0,
           },
         ]}
       >
-        {children}
-      </Text>
+        <Text
+          style={[
+            styles.contentText,
+            { color: shade(color || theme.label, alpha) },
+          ]}
+        >
+          {children}
+        </Text>
+        {loading && (
+          <ActivityIndicator
+            style={{ marginLeft: 10 }}
+            size={20}
+            color={shade(color || theme.label, alpha)}
+          />
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -63,6 +83,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   content: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  contentText: {
     fontFamily: 'Roboto_700Bold',
   },
 });

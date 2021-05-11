@@ -1,5 +1,6 @@
 import {
-  GET_USER_POSTS,
+  FETCH_USER_POSTS,
+  GET_USER_FOLLOWINGS,
   SET_CURRENT_USER,
   SET_USER_CREDENTIALS,
   SET_USER_FOLLOWINGS,
@@ -28,11 +29,18 @@ export const userReducer = (state = initialState, action) => {
         currentUser: action.currentUser,
       };
 
-    case GET_USER_POSTS:
+    case FETCH_USER_POSTS:
       return {
         ...state,
         posts: action.posts,
         postsCount: action.posts.length,
+      };
+
+    case GET_USER_FOLLOWINGS:
+      return {
+        ...state,
+        followings: action.followings,
+        followingsCount: action.followings.length,
       };
 
     case SET_USER_FOLLOWINGS:

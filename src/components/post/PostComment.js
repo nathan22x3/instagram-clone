@@ -16,29 +16,31 @@ const PostComment = ({ avatarUri, username, content }) => {
 
   return (
     <>
-      <View style={styles.comment}>
-        <Text style={[styles.boldLabel, { color: theme.label }]}>
-          {username}{' '}
-        </Text>
-        <View>
-          <Text style={{ color: theme.label, fontSize: 15 }} numberOfLines={1}>
-            {content}
+      {content && (
+        <View style={styles.comment}>
+          <Text style={[styles.boldLabel, { color: theme.label }]}>
+            {username}{' '}
           </Text>
+          <View>
+            <Text
+              style={{ color: theme.label, fontSize: 15 }}
+              numberOfLines={1}
+            >
+              {content}
+            </Text>
+          </View>
         </View>
-      </View>
-      <TouchableOpacity activeOpacity={0.7}>
-        <View style={styles.addComment}>
+      )}
+      <View style={styles.addComment}>
+        <TouchableOpacity activeOpacity={0.7}>
           <Image source={{ uri: avatarUri }} style={styles.avatar} />
-          <TextInput
-            style={{ color: theme.label, fontSize: 15 }}
-            placeholder={t('addComment')}
-            placeholderTextColor={theme.secondaryLabel}
-          />
-        </View>
-      </TouchableOpacity>
-      <Text style={[styles.time, { color: theme.secondaryLabel }]}>
-        6 days ago
-      </Text>
+        </TouchableOpacity>
+        <TextInput
+          style={{ color: theme.label, fontSize: 15 }}
+          placeholder={t('addComment')}
+          placeholderTextColor={theme.secondaryLabel}
+        />
+      </View>
     </>
   );
 };
@@ -64,9 +66,5 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 18,
     marginRight: 8,
-  },
-  time: {
-    fontSize: 10,
-    marginTop: 6,
   },
 });

@@ -41,7 +41,7 @@ const CameraScreen = ({ navigation }) => {
 
   const handleTakePicture = async () => {
     if (camera) {
-      const data = await camera.takePictureAsync(null);
+      const data = await camera.takePictureAsync({ quality: 0.5 });
       setImage(data.uri);
     }
   };
@@ -80,12 +80,23 @@ const CameraScreen = ({ navigation }) => {
       {image ? (
         <>
           <Image source={{ uri: image }} style={{ width, height: width }} />
-          <Button onPress={() => setImage(null)}>{t('back')}</Button>
-          <Button
-            onPress={() => navigation.push('NewPostForm', { tempImage: image })}
-          >
-            {t('continue')}
-          </Button>
+          <View style={styles.actions}>
+            <Button
+              style={styles.button}
+              backgroundColor='transparent'
+              onPress={() => setImage(null)}
+            >
+              {t('back')}
+            </Button>
+            <Button
+              style={styles.button}
+              onPress={() =>
+                navigation.push('NewPostForm', { tempImage: image })
+              }
+            >
+              {t('continue')}
+            </Button>
+          </View>
         </>
       ) : (
         <>
@@ -139,8 +150,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  cameraContainer: {
+  actions: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  button: {
     flex: 1,
+  },
+  cameraContainer: {
+    flex: 3 / 7,
     justifyContent: 'center',
     width,
     height: width,
@@ -152,7 +171,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 40,
   },
   captureButtonBorder: {
     justifyContent: 'center',

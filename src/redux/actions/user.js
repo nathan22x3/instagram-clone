@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import {
-  GET_USER_POSTS,
+  FETCH_USER_POSTS,
+  GET_USER_FOLLOWINGS,
   SET_CURRENT_USER,
   SET_USER_CREDENTIALS,
   SET_USER_FOLLOWINGS,
@@ -21,7 +22,7 @@ export const getUserInfo = () => (dispatch) => {
     });
 };
 
-export const getUserPosts = () => (dispatch) => {
+export const fetchUserPosts = () => (dispatch) => {
   firebase
     .firestore()
     .collection('posts')
@@ -36,7 +37,24 @@ export const getUserPosts = () => (dispatch) => {
         return { id, ...data };
       });
 
-      dispatch({ type: GET_USER_POSTS, posts });
+      dispatch({ type: FETCH_USER_POSTS, posts });
+    });
+};
+
+export const getUserFollowings = () => async (dispatch) => {
+  firebase
+    .firestore()
+    .collection('followings')
+    .doc(firebase.auth().currentUser.uid)
+    .collection('userFollowings')
+    .get()
+    .then((snapshot) => {
+      const followings = snapshot.docs.map((post) => {
+        const id = post.id;
+        return id;
+      });
+
+      dispatch({ type: GET_USER_FOLLOWINGS, followings });
     });
 };
 

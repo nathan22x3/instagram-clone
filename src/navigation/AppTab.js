@@ -5,10 +5,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ThemeContext } from '../contexts/ThemeContext';
-import { getUserInfo, getUserPosts } from '../redux/actions/user';
-import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import { fetchUserPosts, getUserInfo } from '../redux/actions/user';
+import HomeStack from './HomeStack';
 import NewPostStack from './NewPostStack';
+import ProfileStack from './ProfileStack';
 import SearchStack from './SearchStack';
 
 const Tab = createBottomTabNavigator();
@@ -56,20 +56,20 @@ const AppTab = ({ getUserInfo, getUserPosts }) => {
       }}
       initialRouteName={'Home'}
     >
-      <Tab.Screen name='Home' component={HomeScreen} />
+      <Tab.Screen name='Home' component={HomeStack} />
       <Tab.Screen name='Search' component={SearchStack} />
       <Tab.Screen
         name='New'
         component={NewPostStack}
         options={{ tabBarVisible: false }}
       />
-      <Tab.Screen name='Profile' component={ProfileScreen} />
+      <Tab.Screen name='Profile' component={ProfileStack} />
     </Tab.Navigator>
   );
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ getUserInfo, getUserPosts }, dispatch);
+  bindActionCreators({ getUserInfo, getUserPosts: fetchUserPosts }, dispatch);
 
 export default connect(null, mapDispatchToProps)(AppTab);
 

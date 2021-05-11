@@ -16,6 +16,7 @@ const lightTheme = {
   pink: '#ca1d7e',
   grey: '#262626',
   textInput: '#e3e3e3',
+  facebook: '#4267B2',
 };
 
 const darkTheme = {
@@ -33,6 +34,7 @@ const darkTheme = {
   pink: '#ca1d7e',
   grey: '#262626',
   textInput: '#313131',
+  facebook: '#4267B2',
 };
 
 export const themes = { light: lightTheme, dark: darkTheme };

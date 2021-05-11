@@ -1,15 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import { logout } from '../../redux/actions/auth';
+import { getUserFollowings } from '../../redux/actions/user';
 import Button from '../custom/Button';
 
-const ProfileBody = ({ postsCount, followingsCount, logout }) => {
+const ProfileBody = ({
+  postsCount,
+  followingsCount,
+  getUserFollowings,
+  logout,
+}) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    getUserFollowings();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -65,7 +75,7 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ logout }, dispatch);
+  bindActionCreators({ logout, getUserFollowings }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileBody);
 

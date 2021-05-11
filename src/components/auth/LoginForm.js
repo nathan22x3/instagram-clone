@@ -1,7 +1,8 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dimensions,
+  Image,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -32,7 +33,12 @@ const LoginForm = ({ login }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={[styles.logo, { color: theme.label }]}>Instagram Clone</Text>
+      <View style={styles.logo}>
+        <Image
+          source={require('../../../assets/logo-text.png')}
+          resizeMode='center'
+        />
+      </View>
       <TextInput
         placeholder={t('phoneEmailUsername')}
         onChangeText={(value) => handleInputChange('email', value)}
@@ -65,9 +71,14 @@ const LoginForm = ({ login }) => {
       <Button
         style={styles.button}
         icon={
-          <FontAwesome5Brands name={'facebook'} size={24} color={theme.label} />
+          <FontAwesome5Brands
+            name={'facebook'}
+            size={24}
+            color={theme.facebook}
+          />
         }
-        color={theme.label}
+        color={theme.facebook}
+        backgroundColor={'transparent'}
       >
         {t('loginWith', { socialNetwork: 'Facebook' })}
       </Button>
@@ -89,9 +100,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
     marginBottom: 25,
-    fontFamily: 'GochiHand_400Regular',
-    fontSize: 40,
   },
   button: {
     width: '100%',

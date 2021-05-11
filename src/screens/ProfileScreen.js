@@ -5,6 +5,7 @@ import {
   Image,
   RefreshControl,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -12,27 +13,34 @@ import { bindActionCreators } from 'redux';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileUserInfo from '../components/profile/ProfileUserInfo';
 import { ThemeContext } from '../contexts/ThemeContext';
-import { getUserPosts } from '../redux/actions/user';
+import { fetchUserPosts } from '../redux/actions/user';
 import { wait } from '../utils';
-import FastImage from 'react-native-fast-image';
 
 const { width } = Dimensions.get('window');
 const NUM_COLUMNS = 3;
 const HEIGHT = width / NUM_COLUMNS;
 
-const ProfileScreen = ({ posts, getUserPosts }) => {
+const ProfileScreen = ({ navigation, posts, fetchUserPosts }) => {
   const theme = useContext(ThemeContext);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    getUserPosts();
+    fetchUserPosts();
   }, []);
 
   const renderItem = useCallback(
     ({ item }) => (
-      <View style={styles.item}>
-        <Image style={styles.itemImage} source={{ uri: item.downloadURL }} />
-      </View>
+      <TouchableOpacity
+        style={styles.item}
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate('PostDetail', { post: item })}
+      >
+        <Image
+          style={styles.itemImage}
+          source={{ uri: item.downloadURL }}
+          resizeMethod='resize'
+        />
+      </TouchableOpacity>
     ),
     []
   );
@@ -42,7 +50,7 @@ const ProfileScreen = ({ posts, getUserPosts }) => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getUserPosts();
+      fetchUserPosts();
       setRefreshing(false);
     });
   }, []);
@@ -75,7 +83,7 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ getUserPosts }, dispatch);
+  bindActionCreators({ fetchUserPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 

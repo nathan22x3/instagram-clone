@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logo: {
-    fontFamily: 'GochiHand_400Regular',
+    fontFamily: 'BLue-Vinyl',
     fontSize: 30,
   },
   actions: {

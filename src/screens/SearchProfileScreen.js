@@ -1,13 +1,20 @@
 import firebase from 'firebase';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, Dimensions, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Dimensions,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import SearchProfileHeader from '../components/search/SearchProfileHeader';
 import SearchProfileUserInfo from '../components/search/SearchProfileUserInfo';
 
 const { width } = Dimensions.get('window');
 const NUM_COLUMNS = 3;
 
-const SearchProfileScreen = ({ route }) => {
+const SearchProfileScreen = ({ navigation, route }) => {
   const { userInfo } = route.params;
   const [posts, setPosts] = useState([]);
 
@@ -30,6 +37,25 @@ const SearchProfileScreen = ({ route }) => {
       });
   };
 
+  const renderItem = useCallback(
+    ({ item }) => (
+      <TouchableOpacity
+        style={styles.item}
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate('PostDetail', { post: item })}
+      >
+        <Image
+          style={styles.itemImage}
+          source={{ uri: item.downloadURL }}
+          resizeMethod='resize'
+        />
+      </TouchableOpacity>
+    ),
+    []
+  );
+
+  const keyExtraction = useCallback((item) => item.id, []);
+
   const ListHeaderComponent = useCallback(
     () => <SearchProfileUserInfo {...{ userInfo }} />,
     []
@@ -45,15 +71,8 @@ const SearchProfileScreen = ({ route }) => {
       <FlatList
         style={styles.grid}
         data={posts}
-        keyExtraction={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Image
-              style={styles.itemImage}
-              source={{ uri: item.downloadURL }}
-            />
-          </View>
-        )}
+        {...{ keyExtraction }}
+        {...{ renderItem }}
         numColumns={3}
         {...{ ListHeaderComponent }}
       />

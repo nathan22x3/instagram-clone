@@ -22,6 +22,8 @@ const SearchProfileUserInfo = ({
       setIsFollowing(true);
   }, []);
 
+  console.log(followings);
+
   const handleFollowing = () => {
     followingUser(userInfo.id);
     setIsFollowing(true);

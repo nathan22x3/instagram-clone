@@ -2,18 +2,29 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import firebase from 'firebase';
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import TextInput from '../custom/TextInput';
+import { fetchUserPosts } from '../../redux/actions/user';
 
-const NewPostForm = ({ route, navigation }) => {
+const NewPostForm = ({ route, navigation, currentUser, fetchUserPosts }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
   const tabNavigation = useNavigation();
   const { tempImage } = route.params;
   const [caption, setCaption] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddNewPost = async () => {
     const res = await fetch(tempImage);
@@ -26,6 +37,7 @@ const NewPostForm = ({ route, navigation }) => {
     const task = firebase.storage().ref().child(childPath).put(blob);
 
     const taskProgress = (snapshot) => {
+      setIsLoading(true);
       console.log(`Transferred: ${snapshot.bytesTransferred}`);
     };
 
@@ -39,12 +51,17 @@ const NewPostForm = ({ route, navigation }) => {
             .doc(firebase.auth().currentUser.uid)
             .collection('userPosts')
             .add({
+              username: currentUser.username,
               downloadURL: image,
               caption,
               createAt: firebase.firestore.FieldValue.serverTimestamp(),
             });
         })
         .then(() => {
+          fetchUserPosts();
+        })
+        .then(() => {
+          setIsLoading(false);
           navigation.dispatch(
             CommonActions.reset({ index: 0, routes: [{ name: 'Camera' }] })
           );
@@ -68,7 +85,11 @@ const NewPostForm = ({ route, navigation }) => {
           </Text>
         </View>
         <TouchableOpacity onPress={handleAddNewPost}>
-          <Ionicons name={'checkmark'} color={theme.blue} size={36} />
+          {!isLoading ? (
+            <Ionicons name={'checkmark'} color={theme.blue} size={36} />
+          ) : (
+            <ActivityIndicator size={32} color={theme.blue} />
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.info}>
@@ -84,20 +105,26 @@ const NewPostForm = ({ route, navigation }) => {
   );
 };
 
-export default NewPostForm;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ fetchUserPosts }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewPostForm);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
-    paddingHorizontal: 10,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    marginBottom: 15,
+    height: 70,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -111,6 +138,7 @@ const styles = StyleSheet.create({
   info: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 10,
   },
   image: {
     width: 50,

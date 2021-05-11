@@ -1,32 +1,29 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import HomeHeader from '../components/home/HomeHeader';
 import { FlatList } from 'react-native';
 import Story from '../components/story/Story';
 import Post from '../components/post/Post';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchUserPosts } from '../redux/actions/user';
+import { fetchPosts } from '../redux/actions/post';
 
-const data = [
-  {
-    id: 0,
-    username: 'cyberbot_66',
-    avatarUri: 'https://i.ibb.co/qdzxPjf/user-2.jpg',
-  },
-  {
-    id: 1,
-    username: 'pe_chang',
-    avatarUri: 'https://i.ibb.co/W2QrMxg/user-1.jpg',
-  },
-];
-
-const HomeScreen = () => {
+const HomeScreen = ({ posts, fetchUserPosts, fetchPosts, list }) => {
   const renderItem = useCallback(({ item }) => <Post {...item} />, []);
   const keyExtractor = useCallback((item) => `${item.id}`, []);
+
+  useEffect(() => {
+    fetchPosts();
+    fetchUserPosts();
+    console.log({ posts, list });
+  }, []);
 
   return (
     <>
       <HomeHeader />
       <FlatList
         ListHeaderComponent={Story}
-        data={data}
+        data={posts}
         {...{ renderItem }}
         {...{ keyExtractor }}
       />
@@ -34,4 +31,12 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+const mapStateToProps = ({ user, post }) => ({
+  posts: user.posts,
+  list: post.list,
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ fetchUserPosts, fetchPosts }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
