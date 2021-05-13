@@ -21,7 +21,7 @@ const { width } = Dimensions.get('window');
 const Post = ({ navigation, route }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
-  const { avatarUri, username, likeCount, caption, downloadURL, createAt } =
+  const { avatarUri, username, likeCount, caption, image, createAt } =
     route.params.post;
 
   const time = moment(createAt?.toDate());
@@ -44,7 +44,7 @@ const Post = ({ navigation, route }) => {
         }}
       />
       <Image
-        source={{ uri: downloadURL }}
+        source={{ uri: image }}
         style={{ width, height: width }}
         resizeMethod='resize'
       />

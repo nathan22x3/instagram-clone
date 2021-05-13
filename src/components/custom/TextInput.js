@@ -19,6 +19,7 @@ const TextInput = (props) => {
       ]}
       placeholderTextColor={theme.placeholder}
       underlineColorAndroid={'transparent'}
+      ref={props.ref}
     />
   );
 };

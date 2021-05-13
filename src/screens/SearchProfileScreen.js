@@ -1,11 +1,10 @@
 import firebase from 'firebase';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Dimensions,
   FlatList,
   Image,
   StyleSheet,
-  Dimensions,
-  View,
   TouchableOpacity,
 } from 'react-native';
 import SearchProfileHeader from '../components/search/SearchProfileHeader';
@@ -17,7 +16,7 @@ const NUM_COLUMNS = 3;
 const SearchProfileScreen = ({ navigation, route }) => {
   const { userInfo } = route.params;
   const [posts, setPosts] = useState([]);
-
+  console.log(userInfo);
   const fetchPosts = () => {
     firebase
       .firestore()
@@ -46,7 +45,7 @@ const SearchProfileScreen = ({ navigation, route }) => {
       >
         <Image
           style={styles.itemImage}
-          source={{ uri: item.downloadURL }}
+          source={{ uri: item.image }}
           resizeMethod='resize'
         />
       </TouchableOpacity>

@@ -4,7 +4,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-const PostAction = () => {
+const PostAction = ({ handleNavigateToComment }) => {
   const theme = useContext(ThemeContext);
 
   return (
@@ -18,7 +18,7 @@ const PostAction = () => {
             style={styles.leftButton}
           />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleNavigateToComment}>
           <Ionicons
             name={'md-chatbubble-outline'}
             size={26}

@@ -1,7 +1,7 @@
 import firebase from 'firebase';
-import { FETCH_POSTS } from '../constants';
+import { FETCH_POSTS, FETCH_COMMENTS } from '../constants';
 
-export const fetchPosts = (followings) => (dispatch) => {
+export const fetchPosts = () => (dispatch) => {
   firebase
     .firestore()
     .collection('followings')

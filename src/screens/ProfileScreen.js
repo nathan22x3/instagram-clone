@@ -37,7 +37,7 @@ const ProfileScreen = ({ navigation, posts, fetchUserPosts }) => {
       >
         <Image
           style={styles.itemImage}
-          source={{ uri: item.downloadURL }}
+          source={{ uri: item.image }}
           resizeMethod='resize'
         />
       </TouchableOpacity>

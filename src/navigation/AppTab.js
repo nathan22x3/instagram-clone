@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { connect } from 'react-redux';
@@ -15,6 +15,7 @@ const Tab = createBottomTabNavigator();
 
 const AppTab = ({ getUserInfo, getUserPosts }) => {
   const theme = useContext(ThemeContext);
+  const [tabBarVisible, setTabBarVisible] = useState(true);
 
   useEffect(() => {
     getUserInfo();
@@ -42,6 +43,7 @@ const AppTab = ({ getUserInfo, getUserPosts }) => {
             );
           }
         },
+        tabBarVisible,
       })}
       tabBarOptions={{
         showLabel: false,
@@ -51,12 +53,22 @@ const AppTab = ({ getUserInfo, getUserPosts }) => {
           height: 60,
           backgroundColor: theme.background,
           borderTopWidth: 0.5,
-          borderTopColor: 'transparent',
+          borderTopColor: theme.grey,
         },
       }}
       initialRouteName={'Home'}
     >
-      <Tab.Screen name='Home' component={HomeStack} />
+      <Tab.Screen
+        name='Home'
+        component={HomeStack}
+        listeners={{
+          state: (e) => {
+            setTabBarVisible(
+              e.data.state.routes[0].state?.routes[1]?.name !== 'Comments'
+            );
+          },
+        }}
+      />
       <Tab.Screen name='Search' component={SearchStack} />
       <Tab.Screen
         name='New'

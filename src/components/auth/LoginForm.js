@@ -52,6 +52,7 @@ const LoginForm = ({ login }) => {
         style={styles.button}
         color={theme.label}
         onPress={() => login(userInfo.email, userInfo.password)}
+        disabled={!userInfo.email || !userInfo.password}
       >
         {t('login')}
       </Button>

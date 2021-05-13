@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -13,6 +14,7 @@ import { ThemeContext } from '../../contexts/ThemeContext';
 const PostComment = ({ avatarUri, username, content }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
+  const navigation = useNavigation();
 
   return (
     <>
@@ -35,11 +37,14 @@ const PostComment = ({ avatarUri, username, content }) => {
         <TouchableOpacity activeOpacity={0.7}>
           <Image source={{ uri: avatarUri }} style={styles.avatar} />
         </TouchableOpacity>
-        <TextInput
-          style={{ color: theme.label, fontSize: 15 }}
-          placeholder={t('addComment')}
-          placeholderTextColor={theme.secondaryLabel}
-        />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('Comments')}
+        >
+          <Text style={{ color: theme.secondaryLabel, fontSize: 15 }}>
+            {t('addComment')}
+          </Text>
+        </TouchableOpacity>
       </View>
     </>
   );

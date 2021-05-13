@@ -1,10 +1,4 @@
-import firebase from 'firebase';
-import React, {
-  useCallback,
-  useContext,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,21 +7,23 @@ import Post from '../components/post/Post';
 import Story from '../components/story/Story';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { fetchPosts } from '../redux/actions/post';
+import { fetchUserPosts } from '../redux/actions/user';
 
-const HomeScreen = ({ list, fetchPosts }) => {
+const HomeScreen = ({ list, fetchPosts, posts, fetchUserPosts }) => {
   const theme = useContext(ThemeContext);
 
   const renderItem = useCallback(({ item }) => <Post {...item} />, []);
   const keyExtractor = useCallback((item) => `${item.id}`, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     fetchPosts();
+    fetchUserPosts();
   }, []);
 
   return (
     <>
       <HomeHeader />
-      {!list.length ? (
+      {!list ? (
         <View
           style={{
             flex: 1,
@@ -49,11 +45,12 @@ const HomeScreen = ({ list, fetchPosts }) => {
   );
 };
 
-const mapStateToProps = ({ post }) => ({
+const mapStateToProps = ({ post, user }) => ({
   list: post.list,
+  postd: user.postd,
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchPosts }, dispatch);
+  bindActionCreators({ fetchPosts, fetchUserPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

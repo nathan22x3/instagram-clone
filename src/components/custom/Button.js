@@ -15,12 +15,13 @@ const Button = ({
   icon,
   children,
   loading,
+  activeOpacity,
   disabled,
   onPress,
   style,
 }) => {
   const theme = useContext(ThemeContext);
-  const alpha = disabled ? -80 : 0;
+  const alpha = disabled ? -64 : 0;
   const finalBackgroundColor = backgroundColor ?? theme.blue;
 
   return (
@@ -37,7 +38,7 @@ const Button = ({
       ]}
       onPress={onPress}
       disabled={disabled}
-      activeOpacity={0.9}
+      activeOpacity={activeOpacity || 0.9}
     >
       {icon}
       <View

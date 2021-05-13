@@ -51,10 +51,11 @@ const NewPostForm = ({ route, navigation, currentUser, fetchUserPosts }) => {
             .doc(firebase.auth().currentUser.uid)
             .collection('userPosts')
             .add({
+              uid: firebase.auth().currentUser.uid,
               username: currentUser.username,
-              downloadURL: image,
+              image,
               caption,
-              createAt: firebase.firestore.FieldValue.serverTimestamp(),
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             });
         })
         .then(() => {
@@ -93,7 +94,11 @@ const NewPostForm = ({ route, navigation, currentUser, fetchUserPosts }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.info}>
-        <Image source={{ uri: tempImage }} style={styles.image} />
+        <Image
+          source={{ uri: tempImage }}
+          style={styles.image}
+          resizeMethod='resize'
+        />
         <TextInput
           style={styles.caption}
           placeholder={t('writeCaption')}
