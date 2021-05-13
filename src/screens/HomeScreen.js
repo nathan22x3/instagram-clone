@@ -1,42 +1,59 @@
-import React, { useCallback, useEffect } from 'react';
-import HomeHeader from '../components/home/HomeHeader';
-import { FlatList } from 'react-native';
-import Story from '../components/story/Story';
-import Post from '../components/post/Post';
+import firebase from 'firebase';
+import React, {
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchUserPosts } from '../redux/actions/user';
+import HomeHeader from '../components/home/HomeHeader';
+import Post from '../components/post/Post';
+import Story from '../components/story/Story';
+import { ThemeContext } from '../contexts/ThemeContext';
 import { fetchPosts } from '../redux/actions/post';
 
-const HomeScreen = ({ posts, fetchUserPosts, fetchPosts, list }) => {
+const HomeScreen = ({ list, fetchPosts }) => {
+  const theme = useContext(ThemeContext);
+
   const renderItem = useCallback(({ item }) => <Post {...item} />, []);
   const keyExtractor = useCallback((item) => `${item.id}`, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchPosts();
-    fetchUserPosts();
-    console.log({ posts, list });
   }, []);
 
   return (
     <>
       <HomeHeader />
-      <FlatList
-        ListHeaderComponent={Story}
-        data={posts}
-        {...{ renderItem }}
-        {...{ keyExtractor }}
-      />
+      {!list.length ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator color={theme.blue} size={45} />
+        </View>
+      ) : (
+        <FlatList
+          ListHeaderComponent={Story}
+          data={list}
+          {...{ renderItem }}
+          {...{ keyExtractor }}
+        />
+      )}
     </>
   );
 };
 
-const mapStateToProps = ({ user, post }) => ({
-  posts: user.posts,
+const mapStateToProps = ({ post }) => ({
   list: post.list,
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchUserPosts, fetchPosts }, dispatch);
+  bindActionCreators({ fetchPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

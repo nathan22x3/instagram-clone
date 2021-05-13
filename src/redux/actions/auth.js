@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { getErrorMessage } from '../../utils';
-import { SET_AUTH_ERRORS } from '../constants';
+import { CLEAR, SET_AUTH_ERRORS } from '../constants';
 
 export const login = (email, password) => (dispatch) => {
   firebase
@@ -44,5 +44,6 @@ export const logout = () => (dispatch) => {
         type: SET_AUTH_ERRORS,
         errors: { logout: getErrorMessage(error.message) },
       });
+      dispatch({ type: CLEAR });
     });
 };

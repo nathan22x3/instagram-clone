@@ -1,29 +1,41 @@
 import firebase from 'firebase';
 import { FETCH_POSTS } from '../constants';
-import { getUserFollowings } from '../actions/user';
 
-export const fetchPosts = () => async (dispatch, getState) => {
-  await dispatch(getUserFollowings());
-  const { followings } = await getState().user;
+export const fetchPosts = (followings) => (dispatch) => {
+  firebase
+    .firestore()
+    .collection('followings')
+    .doc(firebase.auth().currentUser.uid)
+    .collection('userFollowings')
+    .get()
+    .then((snapshot) => {
+      const followings = snapshot.docs.map((post) => {
+        const id = post.id;
+        return id;
+      });
 
-  const list = [];
+      return followings;
+    })
+    .then((followings) => {
+      const result = followings.map(async (uid) => {
+        const snapshot = await firebase
+          .firestore()
+          .collection('posts')
+          .doc(uid)
+          .collection('userPosts')
+          .get();
 
-  await followings.forEach((userId) => {
-    firebase
-      .firestore()
-      .collection('posts')
-      .doc(userId)
-      .collection('userPosts')
-      .get()
-      .then((snapshot) => {
         const posts = snapshot.docs.map((post) => {
           const id = post.id;
           const data = post.data();
           return { id, ...data };
         });
-        list.push(...posts);
-      });
-  }, []);
 
-  await dispatch({ type: FETCH_POSTS, list });
+        return posts;
+      });
+
+      Promise.all(result).then((res) =>
+        dispatch({ type: FETCH_POSTS, list: res.flat() })
+      );
+    });
 };

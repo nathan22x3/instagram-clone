@@ -1,4 +1,5 @@
 import {
+  CLEAR,
   FETCH_USER_POSTS,
   GET_USER_FOLLOWINGS,
   SET_CURRENT_USER,
@@ -50,11 +51,11 @@ export const userReducer = (state = initialState, action) => {
       };
 
       if (!action.isFollowing) {
-        newState.followings = [...state.followings, action.userId];
+        newState.followings = [...state.followings, action.uid];
         newState.followingsCount = state.followingsCount + 1;
       } else {
         newState.followings = [...state.followings].filter(
-          (userId) => userId !== action.userId
+          (uid) => uid !== action.uid
         );
         newState.followingsCount = state.followingsCount - 1;
       }
@@ -63,6 +64,9 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         ...newState,
       };
+
+    case CLEAR:
+      return initialState;
 
     default:
       return state;

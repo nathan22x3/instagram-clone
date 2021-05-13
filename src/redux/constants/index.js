@@ -5,3 +5,4 @@ export const FETCH_USER_POSTS = 'FETCH_USER_POSTS';
 export const GET_USER_FOLLOWINGS = 'GET_USER_FOLLOWINGS';
 export const SET_USER_FOLLOWINGS = 'SET_USER_FOLLOWINGS';
 export const FETCH_POSTS = 'FETCH_POSTS';
+export const CLEAR = 'CLEAR';

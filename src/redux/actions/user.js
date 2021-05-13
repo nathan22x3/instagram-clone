@@ -41,7 +41,7 @@ export const fetchUserPosts = () => (dispatch) => {
     });
 };
 
-export const getUserFollowings = () => async (dispatch) => {
+export const getUserFollowings = () => (dispatch) => {
   firebase
     .firestore()
     .collection('followings')
@@ -58,28 +58,28 @@ export const getUserFollowings = () => async (dispatch) => {
     });
 };
 
-export const followingUser = (userId) => (dispatch) => {
+export const followingUser = (uid) => (dispatch) => {
   firebase
     .firestore()
     .collection('followings')
     .doc(firebase.auth().currentUser.uid)
     .collection('userFollowings')
-    .doc(userId)
+    .doc(uid)
     .set({})
     .then(() =>
-      dispatch({ type: SET_USER_FOLLOWINGS, userId, isFollowing: false })
+      dispatch({ type: SET_USER_FOLLOWINGS, uid, isFollowing: false })
     );
 };
 
-export const unfollowingUser = (userId) => (dispatch) => {
+export const unfollowingUser = (uid) => (dispatch) => {
   firebase
     .firestore()
     .collection('followings')
     .doc(firebase.auth().currentUser.uid)
     .collection('userFollowings')
-    .doc(userId)
+    .doc(uid)
     .delete()
     .then(() =>
-      dispatch({ type: SET_USER_FOLLOWINGS, userId, isFollowing: true })
+      dispatch({ type: SET_USER_FOLLOWINGS, uid, isFollowing: true })
     );
 };
