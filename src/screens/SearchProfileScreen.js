@@ -16,14 +16,14 @@ const NUM_COLUMNS = 3;
 const SearchProfileScreen = ({ navigation, route }) => {
   const { userInfo } = route.params;
   const [posts, setPosts] = useState([]);
-  console.log(userInfo);
+
   const fetchPosts = () => {
     firebase
       .firestore()
       .collection('posts')
       .doc(userInfo.id)
       .collection('userPosts')
-      .orderBy('createAt', 'desc')
+      .orderBy('createdAt', 'desc')
       .get()
       .then((snapshot) => {
         const posts = snapshot.docs.map((post) => {
@@ -41,7 +41,7 @@ const SearchProfileScreen = ({ navigation, route }) => {
       <TouchableOpacity
         style={styles.item}
         activeOpacity={0.7}
-        onPress={() => navigation.navigate('PostDetail', { post: item })}
+        onPress={() => navigation.push('PostDetail', { post: item })}
       >
         <Image
           style={styles.itemImage}

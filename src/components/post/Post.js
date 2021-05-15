@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import i18n from 'i18next';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+import i18next from 'i18next';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -32,8 +33,9 @@ const Post = (props) => {
   const theme = useContext(ThemeContext);
   const navigation = useNavigation();
 
-  const time = moment(createdAt?.toDate());
-  time.locale(i18n.language);
+  dayjs.locale(i18next.languages[0]);
+  dayjs.extend(require('dayjs/plugin/relativeTime'));
+  const createAt = dayjs().to(dayjs(createdAt?.toDate()));
 
   const handleNavigateToComment = () =>
     navigation.navigate('Comments', {
@@ -81,8 +83,8 @@ const Post = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={[styles.time, { color: theme.secondaryLabel }]}>
-          {time.fromNow()}
+        <Text style={[styles.createAt, { color: theme.secondaryLabel }]}>
+          {createAt}
         </Text>
       </View>
     </View>
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginRight: 8,
   },
-  time: {
+  createAt: {
     fontSize: 10,
     marginTop: 6,
   },

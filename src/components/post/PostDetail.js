@@ -1,4 +1,8 @@
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+import i18next from 'i18next';
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dimensions,
   Image,
@@ -7,25 +11,41 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import PostAction from './PostAction';
 import PostComment from './PostComment';
 import PostHeader from './PostHeader';
-import moment from 'moment';
-import i18n from 'i18next';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
 const Post = ({ navigation, route }) => {
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
-  const { avatarUri, username, likeCount, caption, image, createAt } =
-    route.params.post;
+  const {
+    id,
+    uid,
+    username,
+    userAvatar,
+    likeCount,
+    caption,
+    image,
+    createdAt,
+  } = route.params.post;
 
-  const time = moment(createAt?.toDate());
-  time.locale(i18n.language);
+  dayjs.locale(i18next.languages[0]);
+  dayjs.extend(require('dayjs/plugin/relativeTime'));
+  const time = dayjs().to(dayjs(createdAt.toDate()));
+
+  const handleNavigateToComment = () =>
+    navigation.push('Comments', {
+      uid,
+      postId: id,
+      avatar: 'https://i.ibb.co/qdzxPjf/user-2.jpg',
+      username,
+      caption,
+      createdAt,
+    });
 
   return (
     <View style={styles.container}>
@@ -48,7 +68,7 @@ const Post = ({ navigation, route }) => {
         style={{ width, height: width }}
         resizeMethod='resize'
       />
-      <PostAction />
+      <PostAction {...{ handleNavigateToComment }} />
       <View style={styles.feedInfo}>
         <Text style={[styles.boldLabel, { color: theme.label }]}>
           {likeCount || 0} like
@@ -59,9 +79,18 @@ const Post = ({ navigation, route }) => {
           </Text>
           <Text style={{ color: theme.label, fontSize: 15 }}>{caption}</Text>
         </View>
-        <PostComment avatarUri={'https://i.ibb.co/qdzxPjf/user-2.jpg'} />
-        <Text style={[styles.time, { color: theme.secondaryLabel }]}>
-          {time.fromNow()}
+        <View style={styles.addComment}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleNavigateToComment}
+          >
+            <Text style={{ color: theme.secondaryLabel, fontSize: 15 }}>
+              {t('showComments')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={[styles.createAt, { color: theme.secondaryLabel }]}>
+          {time}
         </Text>
       </View>
     </View>
@@ -98,7 +127,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
-  time: {
+  createAt: {
     fontSize: 10,
     marginTop: 6,
   },

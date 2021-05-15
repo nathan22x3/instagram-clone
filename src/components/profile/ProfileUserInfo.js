@@ -63,7 +63,7 @@ const ProfileBody = ({
         {t('editProfile')}
       </Button>
       <TouchableOpacity onPress={logout}>
-        <Text style={{ color: theme.label }}>Logout</Text>
+        <Text style={{ color: theme.label }}>{t('logout')}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -4,7 +4,7 @@ import en from './en/common.json';
 import vi from './vi/common.json';
 
 i18n.use(initReactI18next).init({
-  fallbackLng: 'vi',
+  fallbackLng: 'en',
   resources: {
     en: { common: en },
     vi: { common: vi },

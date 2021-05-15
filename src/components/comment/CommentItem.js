@@ -1,14 +1,16 @@
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import i18next from 'i18next';
-import moment from 'moment';
 import React, { useContext } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
 const CommentItem = ({ username, content, createdAt }) => {
   const theme = useContext(ThemeContext);
-  const time = moment(createdAt?.toDate());
-  time.locale(i18next.languages[0]);
 
+  dayjs.locale(i18next.languages[0]);
+  dayjs.extend(require('dayjs/plugin/relativeTime'));
+  const createAt = dayjs().to(dayjs(createdAt?.toDate()));
   return (
     <View style={styles.container}>
       <Image
@@ -22,8 +24,8 @@ const CommentItem = ({ username, content, createdAt }) => {
           <Text style={styles.username}>{username} </Text>
           {content}
         </Text>
-        <Text style={[styles.time, { color: theme.secondaryLabel }]}>
-          {time.fromNow()}
+        <Text style={[styles.createAt, { color: theme.secondaryLabel }]}>
+          {createAt}
         </Text>
       </View>
     </View>
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: 'Roboto_700Bold',
   },
-  time: {
+  createAt: {
     marginTop: 5,
     fontSize: 11,
     fontFamily: 'Roboto_700Bold',

@@ -69,13 +69,33 @@ const AppTab = ({ getUserInfo, getUserPosts }) => {
           },
         }}
       />
-      <Tab.Screen name='Search' component={SearchStack} />
+      <Tab.Screen
+        name='Search'
+        component={SearchStack}
+        listeners={{
+          state: (e) => {
+            setTabBarVisible(
+              e.data.state.routes[1].state?.routes[3]?.name !== 'Comments'
+            );
+          },
+        }}
+      />
       <Tab.Screen
         name='New'
         component={NewPostStack}
         options={{ tabBarVisible: false }}
       />
-      <Tab.Screen name='Profile' component={ProfileStack} />
+      <Tab.Screen
+        name='Profile'
+        component={ProfileStack}
+        listeners={{
+          state: (e) => {
+            setTabBarVisible(
+              e.data.state.routes[3].state?.routes[2]?.name !== 'Comments'
+            );
+          },
+        }}
+      />
     </Tab.Navigator>
   );
 };

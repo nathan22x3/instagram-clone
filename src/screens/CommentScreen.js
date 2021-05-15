@@ -1,16 +1,17 @@
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
 import firebase from 'firebase';
 import i18next from 'i18next';
-import moment from 'moment';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   FlatList,
   Image,
+  Keyboard,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Keyboard,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { connect } from 'react-redux';
@@ -27,7 +28,9 @@ const CommentScreen = ({ navigation, route, currentUser }) => {
   const [comment, setComment] = useState('');
   const flatList = useRef(null);
 
-  const time = moment(createdAt?.toDate());
+  dayjs.locale(i18next.languages[0]);
+  dayjs.extend(require('dayjs/plugin/relativeTime'));
+  const createAt = dayjs().to(dayjs(createdAt?.toDate()));
 
   const renderItem = ({ item }) => <CommentItem {...item} />;
   const keyExtractor = (item) => item.id;
@@ -50,7 +53,6 @@ const CommentScreen = ({ navigation, route, currentUser }) => {
   };
 
   useEffect(() => {
-    time.locale(i18next.languages[0]);
     const unsubscriber = firebase
       .firestore()
       .collection('posts')
@@ -89,8 +91,8 @@ const CommentScreen = ({ navigation, route, currentUser }) => {
             <Text style={styles.username}>{username} </Text>
             {caption}
           </Text>
-          <Text style={[styles.time, { color: theme.secondaryLabel }]}>
-            {time.fromNow()}
+          <Text style={[styles.createAt, { color: theme.secondaryLabel }]}>
+            {createAt}
           </Text>
         </View>
       </View>
@@ -112,7 +114,6 @@ const CommentScreen = ({ navigation, route, currentUser }) => {
           value={comment}
           placeholder={t('addComment')}
           onChangeText={setComment}
-          // autoFocus
           blurOnSubmit
         />
         <Button
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   username: {
     fontFamily: 'Roboto_700Bold',
   },
-  time: {
+  createAt: {
     marginTop: 5,
     fontSize: 11,
     fontFamily: 'Roboto_700Bold',

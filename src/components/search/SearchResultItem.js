@@ -11,7 +11,7 @@ const SearchResultItem = ({ user }) => {
     <TouchableOpacity
       style={styles.container}
       activeOpacity={0.7}
-      onPress={() => navigation.navigate('SearchProfile', { userInfo: user })}
+      onPress={() => navigation.push('SearchProfile', { userInfo: user })}
     >
       <Image
         source={{

@@ -28,7 +28,7 @@ export const fetchUserPosts = () => (dispatch) => {
     .collection('posts')
     .doc(firebase.auth().currentUser.uid)
     .collection('userPosts')
-    .orderBy('createAt', 'desc')
+    .orderBy('createdAt', 'desc')
     .get()
     .then((snapshot) => {
       const posts = snapshot.docs.map((post) => {

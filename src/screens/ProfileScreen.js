@@ -1,4 +1,9 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -6,7 +11,6 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -24,7 +28,7 @@ const ProfileScreen = ({ navigation, posts, fetchUserPosts }) => {
   const theme = useContext(ThemeContext);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchUserPosts();
   }, []);
 

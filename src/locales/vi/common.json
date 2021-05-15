@@ -1,6 +1,7 @@
 {
   "login": "Đăng nhập",
   "signup": "Đăng ký",
+  "logout": "Đăng xuất",
   "loginWith": "Đăng nhập với {{socialNetwork}}",
   "signupWith": "Đăng ký với {{socialNetwork}}",
   "loginSuggestion": "Đã có tài khoản?",
