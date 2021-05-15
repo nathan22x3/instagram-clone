@@ -4,17 +4,25 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-const PostAction = ({ handleNavigateToComment }) => {
+const PostAction = ({
+  isLiked,
+  handleLike,
+  handleUnlike,
+  handleNavigateToComment,
+}) => {
   const theme = useContext(ThemeContext);
 
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={isLiked ? handleUnlike : handleLike}
+        >
           <Ionicons
-            name={'md-heart-outline'}
+            name={isLiked ? 'md-heart' : 'md-heart-outline'}
             size={30}
-            color={theme.label}
+            color={isLiked ? theme.red : theme.label}
             style={styles.leftButton}
           />
         </TouchableOpacity>

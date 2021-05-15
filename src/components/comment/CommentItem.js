@@ -39,17 +39,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingTop: 10,
-    paddingBottom: 15,
+    marginBottom: 15,
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginTop: 8,
     marginRight: 15,
   },
   body: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   content: {
     maxWidth: 300,

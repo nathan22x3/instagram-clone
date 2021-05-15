@@ -5,23 +5,22 @@ import SearchHeader from '../components/search/SearchHeader';
 import SearchResultList from '../components/search/SearchResultList';
 
 const SearchScreen = () => {
-  const [searchText, setSearchText] = useState('');
   const [results, setResults] = useState([]);
 
   const onChangeText = debounce((value) => {
-    setSearchText(value);
-
     firebase
       .firestore()
       .collection('users')
-      .where('username', '>=', searchText)
+      .where('username', '>=', value)
       .get()
       .then((snapshot) => {
-        const users = snapshot.docs.map((user) => {
-          const id = user.id;
-          const data = user.data();
-          return { id, ...data };
-        });
+        const users = snapshot.docs
+          .filter((user) => user.id !== firebase.auth().currentUser.uid)
+          .map((user) => {
+            const id = user.id;
+            const data = user.data();
+            return { id, ...data };
+          });
 
         setResults(users);
       });

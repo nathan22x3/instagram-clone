@@ -7,9 +7,8 @@ import Post from '../components/post/Post';
 import Story from '../components/story/Story';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { fetchPosts } from '../redux/actions/post';
-import { fetchUserPosts } from '../redux/actions/user';
 
-const HomeScreen = ({ list, fetchPosts, posts, fetchUserPosts }) => {
+const HomeScreen = ({ list, fetchPosts }) => {
   const theme = useContext(ThemeContext);
 
   const renderItem = useCallback(({ item }) => <Post {...item} />, []);
@@ -17,7 +16,6 @@ const HomeScreen = ({ list, fetchPosts, posts, fetchUserPosts }) => {
 
   useEffect(() => {
     fetchPosts();
-    fetchUserPosts();
   }, []);
 
   return (
@@ -45,12 +43,11 @@ const HomeScreen = ({ list, fetchPosts, posts, fetchUserPosts }) => {
   );
 };
 
-const mapStateToProps = ({ post, user }) => ({
+const mapStateToProps = ({ post }) => ({
   list: post.list,
-  postd: user.postd,
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchPosts, fetchUserPosts }, dispatch);
+  bindActionCreators({ fetchPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

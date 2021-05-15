@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import i18next from 'i18next';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dimensions,
@@ -15,23 +15,17 @@ import {
 import { ThemeContext } from '../../contexts/ThemeContext';
 import PostAction from './PostAction';
 import PostHeader from './PostHeader';
+import firebase from 'firebase';
 
 const { width } = Dimensions.get('window');
 
 const Post = (props) => {
-  const {
-    id,
-    uid,
-    username,
-    userAvatar,
-    likeCount,
-    caption,
-    image,
-    createdAt,
-  } = props;
+  const { id, uid, username, userAvatar, caption, image, createdAt } = props;
   const { t } = useTranslation('common');
   const theme = useContext(ThemeContext);
   const navigation = useNavigation();
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   dayjs.locale(i18next.languages[0]);
   dayjs.extend(require('dayjs/plugin/relativeTime'));
@@ -46,6 +40,45 @@ const Post = (props) => {
       caption,
       createdAt,
     });
+
+  const handleLike = () => {
+    firebase
+      .firestore()
+      .collection('posts')
+      .doc(uid)
+      .collection('userPosts')
+      .doc(id)
+      .collection('likes')
+      .doc(firebase.auth().currentUser.uid)
+      .set({});
+  };
+
+  const handleUnlike = () => {
+    firebase
+      .firestore()
+      .collection('posts')
+      .doc(uid)
+      .collection('userPosts')
+      .doc(id)
+      .collection('likes')
+      .doc(firebase.auth().currentUser.uid)
+      .delete();
+  };
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection('posts')
+      .doc(uid)
+      .collection('userPosts')
+      .doc(id)
+      .collection('likes')
+      .onSnapshot((snapshot) => {
+        const likes = snapshot.docs.map((item) => item.id);
+        setIsLiked(likes.includes(firebase.auth().currentUser.uid));
+        setLikeCount(snapshot.docs.length);
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -62,10 +95,20 @@ const Post = (props) => {
           resizeMethod='resize'
         />
       </View>
-      <PostAction {...{ handleNavigateToComment }} />
+      <PostAction
+        {...{ isLiked }}
+        {...{ handleLike }}
+        {...{ handleUnlike }}
+        {...{ handleNavigateToComment }}
+      />
       <View style={styles.feedInfo}>
-        <Text style={[styles.boldLabel, { color: theme.label }]}>
-          {likeCount || 0} like
+        <Text
+          style={[
+            styles.boldLabel,
+            { color: theme.label, textTransform: 'lowercase' },
+          ]}
+        >
+          {likeCount} {t(likeCount > 1 ? 'likes' : 'like')}
         </Text>
         <View style={styles.caption}>
           <Text style={[styles.boldLabel, { color: theme.label }]}>

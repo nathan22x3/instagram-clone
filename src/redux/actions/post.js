@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { FETCH_POSTS, FETCH_COMMENTS } from '../constants';
+import { FETCH_POSTS } from '../constants';
 
 export const fetchPosts = () => (dispatch) => {
   firebase
@@ -7,16 +7,12 @@ export const fetchPosts = () => (dispatch) => {
     .collection('followings')
     .doc(firebase.auth().currentUser.uid)
     .collection('userFollowings')
-    .get()
-    .then((snapshot) => {
+    .onSnapshot((snapshot) => {
       const followings = snapshot.docs.map((post) => {
         const id = post.id;
         return id;
       });
 
-      return followings;
-    })
-    .then((followings) => {
       const result = followings.map(async (uid) => {
         const snapshot = await firebase
           .firestore()
@@ -34,8 +30,25 @@ export const fetchPosts = () => (dispatch) => {
         return posts;
       });
 
-      Promise.all(result).then((res) =>
-        dispatch({ type: FETCH_POSTS, list: res.flat() })
-      );
+      Promise.all(result).then((res) => {
+        firebase
+          .firestore()
+          .collection('posts')
+          .doc(firebase.auth().currentUser.uid)
+          .collection('userPosts')
+          .onSnapshot((snapshot) => {
+            const posts = snapshot.docs.map((post) => {
+              const id = post.id;
+              const data = post.data();
+              return { id, ...data };
+            });
+
+            const list = [...res.flat(), ...posts].sort((a, b) => {
+              return b.createdAt - a.createdAt;
+            });
+
+            dispatch({ type: FETCH_POSTS, list });
+          });
+      });
     });
 };

@@ -158,11 +158,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginTop: 5,
     marginRight: 15,
   },
   info: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   caption: {
     maxWidth: 300,
